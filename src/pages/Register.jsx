@@ -12,8 +12,8 @@ const Register = () => {
     email: "",
     password: "",
     gender: "",
-    weight: "",
-    height: "",
+    weight: 0,
+    height: 0,
     objetive: "",
     ability: "",
     typeDiet: "",
@@ -41,7 +41,7 @@ const Register = () => {
   const tabChanged = ({ prevIndex, nextIndex }) => {
     console.log("prevIndex", prevIndex);
     console.log("nextIndex", nextIndex);
-    setIsLastStep(nextIndex === 4); 
+    setIsLastStep(nextIndex === 4);
   };
 
   useEffect(() => {
@@ -82,13 +82,13 @@ const Register = () => {
         onSubmit={handleComplete}
         onTabChange={tabChanged}
       >
-        <FormWizard.TabContent title="Detalles personales" icon="ti-user">
+        <FormWizard.TabContent title="Datos personales" icon="ti-user">
           <h2>Tus datos</h2>
           <Input
             value={user.name}
             onChange={handleInputChange}
             name="name"
-            type="name"
+            type="text"
             title="Nombre"
           />
           <Input
@@ -118,14 +118,14 @@ const Register = () => {
             <option value="otro">Otro</option>
           </select>
         </FormWizard.TabContent>
-        <FormWizard.TabContent title="Plan de ejercicios" icon="ti-heart">
+        <FormWizard.TabContent title="Detalles personales" icon="ti-heart">
           <h2>Objetivo</h2>
           <p>Información para tu plan de ejercicios</p>
           <Input
             value={user.weight}
             onChange={handleInputChange}
             name="weight"
-            type="weight"
+            type="number"
             title="Tu peso"
             placeholder="En kilogramos"
           />
@@ -133,7 +133,7 @@ const Register = () => {
             value={user.height}
             onChange={handleInputChange}
             name="height"
-            type="height"
+            type="number"
             title="Tu altura"
             placeholder="En centímetros"
           />
@@ -207,7 +207,7 @@ const Register = () => {
         </FormWizard.TabContent>
         <FormWizard.TabContent title="Validación" icon="ti-check">
           <h1>¡Enhorabuena! ¡Has completado todos los pasos!</h1>
-          <p>¡Estás en buenas manos! y no nos lavamos las manos a menudo</p>
+          <p>¡Estás en buenas manos! y no nos las lavamos a menudo</p>
           <quote>
             "Las buenas recetas son como los buenos amigos: hacen que la vida
             sea más deliciosa"

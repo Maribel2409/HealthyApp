@@ -6,6 +6,7 @@ import { getFavorites } from "../services/RecipesService";
 const FavoriteRecipes = () => {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
     getFavorites()
@@ -15,6 +16,23 @@ const FavoriteRecipes = () => {
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScroll(true);
+      } else {
+        setShowScroll(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   if (loading) {
     return (
@@ -32,8 +50,8 @@ const FavoriteRecipes = () => {
   }
 
   return (
-    <div className="container mt-5">
-      <h2 className="mb-3">Recetas Favoritas</h2>
+    <div className="container mt-5 text-center">
+      <h2 className="h2 mb-3">Recetas Favoritas</h2>
       {favorites.length > 0 ? (
         favorites.map((recipe) => (
           <div
@@ -68,10 +86,20 @@ const FavoriteRecipes = () => {
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <h2>Aún no has guardado recetas como favoritas</h2>
           <p>
-            <Link to="/">Volver a la página principal</Link> para añadir recetas
+            <Link to="/" style={{ color: "#83a580" }}>
+              Volver a la página principal
+            </Link>{" "}
+            para añadir recetas
           </p>
         </div>
       )}
+
+      <button
+        className={`scroll-to-top ${showScroll ? "show" : ""}`}
+        onClick={scrollToTop}
+      >
+        ↑
+      </button>
     </div>
   );
 };

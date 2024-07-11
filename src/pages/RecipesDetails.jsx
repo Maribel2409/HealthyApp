@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getRecipe, toggleFavorite } from "../services/RecipesService";
 import { useNavigate, useParams } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -7,9 +7,10 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import "../index.css";
 import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
-
+import { AuthContext } from "../contexts/AuthContext";
 
 function RecipeDetails() {
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState({});
@@ -59,8 +60,8 @@ function RecipeDetails() {
 
   return (
     <div className="container mt-5">
-    <div style={{ textAlign: "center" }}>
-      <h2 className="h2">{recipe.name}</h2>
+      <div style={{ textAlign: "center" }}>
+        <h2 className="h2">{recipe.name}</h2>
       </div>
       <img
         src={recipe.urlImage}
@@ -77,12 +78,14 @@ function RecipeDetails() {
         }}
       />
 
-      <button onClick={handleToggleFavorite} className="favorite-button">
-        <FontAwesomeIcon
-          icon={isFavorite ? solidHeart : regularHeart}
-          style={{ color: isFavorite ? "#83A580" : "black" }}
-        />
-      </button>
+      {user && (
+        <button onClick={handleToggleFavorite} className="favorite-button">
+          <FontAwesomeIcon
+            icon={isFavorite ? solidHeart : regularHeart}
+            style={{ color: isFavorite ? "#83A580" : "black" }}
+          />
+        </button>
+      )}
 
       <p className="mt-4 mb-3">{recipe.phrase}</p>
 

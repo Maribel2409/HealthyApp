@@ -78,7 +78,10 @@ const Home = () => {
       .then((recipesApiRes) => {
         setRecipesApi(recipesApiRes.createdRecipes);
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        setLoadingApi(false);
+        console.error(err);
+      })
       .finally(() => setLoadingApi(false));
   };
 
@@ -89,7 +92,7 @@ const Home = () => {
         <input
           className="form-control me-2 mb-3"
           type="search"
-          placeholder="Escribe aquí los ingredientes"
+          placeholder="Busca tu receta"
           aria-label="Search"
           style={{ borderColor: "#83A580" }}
           onChange={handleSearchInput}
@@ -97,7 +100,7 @@ const Home = () => {
         <BsSearch
           style={{
             position: "absolute",
-            right: "10px",
+            right: "30px",
             top: "8px",
             fontSize: "20px",
             color: "#83A580",
@@ -177,7 +180,12 @@ const Home = () => {
                       {recipe.preparationTime} min
                     </small>
                   </p>
-                  <Link to={`/recipes/${recipe._id}`}>Ver más</Link>
+                  <Link
+                    to={`/recipes/${recipe._id}`}
+                    style={{ color: "#83a580" }}
+                  >
+                    Ver más
+                  </Link>
                 </div>
               </div>
             </div>
