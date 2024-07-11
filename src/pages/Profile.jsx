@@ -34,7 +34,6 @@ const Profile = () => {
       </div>
     );
   }
-  
 
   const generateAvatarUrl = (name) => {
     const initial = name ? name.trim().charAt(0).toUpperCase() : "";
@@ -49,7 +48,7 @@ const Profile = () => {
           src={generateAvatarUrl(user.name)}
           alt="Avatar"
           className="rounded-circle"
-          style={{ width: "100px", height: "100px", objectFit: "cover"}}
+          style={{ width: "100px", height: "100px", objectFit: "cover" }}
         />
         <h2 className="mt-3">{user.name}</h2>
         <p>{user.email}</p>
@@ -80,7 +79,12 @@ const Profile = () => {
                         {recipe.preparationTime} min
                       </small>
                     </p>
-                    <Link to={`/recipes/${recipe._id}`}>Ver más</Link>
+                    <Link
+                      to={`/recipes/${recipe._id}`}
+                      style={{ color: "#83a580" }}
+                    >
+                      Ver más
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -91,7 +95,10 @@ const Profile = () => {
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <h2>Aún no has guardado recetas como favoritas</h2>
           <p>
-            <Link to="/">Volver a la página principal</Link> para añadir recetas
+            <Link to="/" style={{ color: "#83a580" }}>
+              Volver a la página principal
+            </Link>{" "}
+            para añadir recetas
           </p>
         </div>
       )}

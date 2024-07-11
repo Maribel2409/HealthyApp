@@ -1,38 +1,26 @@
 import { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
-import { editUser, getCurrentUserService } from "../services/UserService";
+import { editUser } from "../services/ProtectUserService";
 
 const UserProfile = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    gender: "",
-    weight: 0,
-    height: 0,
-    objetive: "",
-    ability: "",
-    typeDiet: "",
-    alergic: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    gender: user?.gender || "",
+    weight: user?.weight || 0,
+    height: user?.height || 0,
+    objetive: user?.objetive || "",
+    ability: user?.ability || "",
+    typeDiet: user?.typeDiet || "",
+    alergic: user?.alergic || "",
+    avatarUrl: user?.avatarUrl || "",
   });
 
   const [editMode, setEditMode] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      // Cargar los datos actuales del usuario cuando el componente se monte
-      getCurrentUserService(user._id)
-        .then((userDataFromServer) => {
-          setUserData(userDataFromServer);
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-        });
-    }
-  }, [user]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -48,12 +36,14 @@ const UserProfile = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setLoading(true);
+    //setLoading(true);
     editUser(user._id, userData)
       .then(() => {
-        setLoading(false);
+        //setLoading(false);
         setEditMode(false);
+        setUserData(userData)
         // Actualización exitosa, podrías mostrar un mensaje de éxito o redirigir a otra página
+        navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating user:", error);
@@ -64,15 +54,18 @@ const UserProfile = () => {
   if (!user) {
     return <PacmanLoading />;
   }
-
+  const generateAvatarUrl = (name) => {
+    const initial = name ? name.trim().charAt(0).toUpperCase() : "";
+    return `https://ui-avatars.com/api/?name=${initial}&size=100`;
+  };
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 text-center">
       <h4 className="h2 mt-2 mb-3">Mis datos personales</h4>
-      <div className="text-center">
+      <div className="">
         <img
-          src={`https://ui-avatars.com/api/?name=${user.name}&size=100`}
+          src={generateAvatarUrl(user.name)}
           alt="Avatar"
-          className="rounded-circle"
+          className="rounded-circle mb-3"
           style={{ width: "100px", height: "100px", objectFit: "cover" }}
         />
         {editMode ? (
@@ -86,23 +79,7 @@ const UserProfile = () => {
               placeholder="Nombre"
               required
             />
-            <input
-              type="email"
-              name="email"
-              value={userData.email}
-              onChange={handleInputChange}
-              className="form-control mb-2"
-              placeholder="Correo electrónico"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              value={userData.password}
-              onChange={handleInputChange}
-              className="form-control mb-2"
-              placeholder="Contraseña"
-            />
+
             <select
               className="form-select mb-2"
               aria-label="Género"
@@ -190,7 +167,7 @@ const UserProfile = () => {
               <option value="gluten">Gluten</option>
               <option value="frutos secos">Frutos secos</option>
             </select>
-            <button type="submit" className="btn btn-primary me-2">
+            <button type="submit" className="btn btn-custom me-2">
               Guardar
             </button>
             <button
@@ -212,7 +189,9 @@ const UserProfile = () => {
         )}
       </div>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Link to="/">Volver a la página principal</Link>
+        <Link to="/" style={{ color: "#83a580" }}>
+          Volver a la página principal
+        </Link>
       </div>
     </div>
   );
