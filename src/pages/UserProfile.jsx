@@ -41,9 +41,9 @@ const UserProfile = () => {
       .then(() => {
         //setLoading(false);
         setEditMode(false);
-        setUserData(userData)
+        setUserData(userData);
         // Actualización exitosa, podrías mostrar un mensaje de éxito o redirigir a otra página
-        navigate("/profile");
+        navigate("/user-profile");
       })
       .catch((error) => {
         console.error("Error updating user:", error);

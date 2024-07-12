@@ -7,7 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import CalendarPage from "./pages/CalendarPage";
 import RecipeDetails from "./pages/RecipesDetails";
-import UserForm from "./pages/UserForm";
+
 import FavoriteRecipes from "./pages/FavoriteRecipes";
 import UserProfile from "./pages/UserProfile";
 
@@ -19,7 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/user/edit/:id" element={<UserForm />} />
+
         <Route path="/calendar" element={<CalendarPage />} />
 
         <Route path="/recipes/:id" element={<RecipeDetails />} />
