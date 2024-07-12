@@ -74,6 +74,7 @@ const Home = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     setLoadingApi(true);
+
     createChat(ingredients)
       .then((recipesApiRes) => {
         setRecipesApi(recipesApiRes.createdRecipes);
@@ -87,118 +88,137 @@ const Home = () => {
 
   return (
     <div className="container mt-3">
-      <h2>Bienvenido</h2>
-      <div style={{ position: "relative" }}>
-        <input
-          className="form-control me-2 mb-3"
-          type="search"
-          placeholder="Busca tu receta"
-          aria-label="Search"
-          style={{ borderColor: "#83A580" }}
-          onChange={handleSearchInput}
-        />
-        <BsSearch
-          style={{
-            position: "absolute",
-            right: "30px",
-            top: "8px",
-            fontSize: "20px",
-            color: "#83A580",
-          }}
-        />
-      </div>
-
-      {loadingApi ? <PacmanLoading /> : ""}
-      {user && (
-        <form
-          onSubmit={onSubmit}
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px",
-            justifyContent: "center",
-          }}
-        >
-          {INGREDIENTS_VALUES.map((ingredient) => {
-            const IconComponent = ingredient.iconComponent;
-            return (
-              <button
-                key={ingredient.value}
-                type="button"
-                className="btn btn-custom-ingredients"
-                value={ingredient.value}
-                onClick={handleIngredient}
-              >
-                {!ingredients.includes(ingredient.value) ? (
-                  IconComponent ? (
-                    <IconComponent />
-                  ) : (
-                    <i className={`fa-solid ${ingredient.icon}`}></i>
-                  )
-                ) : (
-                  <i className="fa-solid fa-check"
-                  style={{ color: "#00ff6a" }}></i>
-                )}{" "}
-                {ingredient.text}
-              </button>
-            );
-          })}
-          <div className="row w-100 btn-lg-custom">
-            <div className="col d-flex justify-content-center mt-3">
-              <button
-                type="submit"
-                className="btn btn-custom btn-padding-custom"
-              >
-                Enviar
-              </button>
-            </div>
+      {loadingApi ? (
+        <>
+          <div className="container text-center mb-5 mt-5">
+            <h2 className="h2 mb-3">
+              Sus recetas se están preparando...a fuego lento
+            </h2>
+            <p>En breves momentos las recibirá en su email</p>
+            <PacmanLoading />
           </div>
-        </form>
-      )}
-      {loading ? (
-        <PacmanLoading />
+        </>
       ) : (
-        filteredRecipes.map((recipe) => (
-          <div
-            className="card mb-3 mt-5"
-            style={{ maxWidth: "540px" }}
-            key={recipe._id}
-          >
-            <div className="row g-0">
-              <div className="col-md-4">
-                <img
-                  src={recipe.urlImage}
-                  className="img-fluid rounded-start"
-                  alt={recipe.name}
-                />
-              </div>
-              <div className="col-md-8">
-                <div className="card-body">
-                  <h5 className="card-title">{recipe.name}</h5>
-                  <p className="card-text">{recipe.phrase}</p>
-                  <p className="card-text">
-                    <small className="text-muted">
-                      {recipe.preparationTime} min
-                    </small>
-                  </p>
-                  <Link
-                    to={`/recipes/${recipe._id}`}
-                    style={{ color: "#83a580" }}
+        <>
+          <h2>Bienvenido</h2>
+          <div style={{ position: "relative" }}>
+            <input
+              className="form-control me-2 mb-3"
+              type="search"
+              placeholder="Busca tu receta"
+              aria-label="Search"
+              style={{ borderColor: "#83A580" }}
+              onChange={handleSearchInput}
+            />
+            <BsSearch
+              style={{
+                position: "absolute",
+                right: "30px",
+                top: "8px",
+                fontSize: "20px",
+                color: "#83A580",
+              }}
+            />
+          </div>
+
+          {user && (
+            <form
+              onSubmit={onSubmit}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "10px",
+                justifyContent: "center",
+              }}
+            >
+              {INGREDIENTS_VALUES.map((ingredient) => {
+                const IconComponent = ingredient.iconComponent;
+                return (
+                  <button
+                    key={ingredient.value}
+                    type="button"
+                    className="btn btn-custom-ingredients"
+                    value={ingredient.value}
+                    onClick={handleIngredient}
                   >
-                    Ver más
-                  </Link>
+                    {!ingredients.includes(ingredient.value) ? (
+                      IconComponent ? (
+                        <IconComponent />
+                      ) : (
+                        <i className={`fa-solid ${ingredient.icon}`}></i>
+                      )
+                    ) : (
+                      <i
+                        className="fa-solid fa-check"
+                        style={{ color: "#00ff6a" }}
+                      ></i>
+                    )}{" "}
+                    {ingredient.text}
+                  </button>
+                );
+              })}
+              <div className="row w-100 btn-lg-custom">
+                <div className="col d-flex justify-content-center mt-3">
+                  <button
+                    type="submit"
+                    className="btn btn-custom btn-padding-custom"
+                  >
+                    Enviar
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-        ))
+            </form>
+          )}
+          {loading ? (
+            <>
+              <div>
+                <PacmanLoading />
+              </div>
+            </>
+          ) : (
+            filteredRecipes.map((recipe) => (
+              <div
+                className="card mb-3 mt-5"
+                style={{ maxWidth: "540px" }}
+                key={recipe._id}
+              >
+                <div className="row g-0">
+                  <div className="col-md-4">
+                    <img
+                      src={recipe.urlImage}
+                      className="img-fluid rounded-start"
+                      alt={recipe.name}
+                    />
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">{recipe.name}</h5>
+                      <p className="card-text">{recipe.phrase}</p>
+                      <p className="card-text">
+                        <small className="text-muted">
+                          {recipe.preparationTime} min
+                        </small>
+                      </p>
+                      <Link
+                        to={`/recipes/${recipe._id}`}
+                        style={{ color: "#83a580" }}
+                      >
+                        Ver más
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          <button
+            className={`scroll-to-top ${showScroll ? "show" : ""}`}
+            onClick={scrollToTop}
+          >
+            ↑
+          </button>
+        </>
       )}
-      <button
-        className={`scroll-to-top ${showScroll ? "show" : ""}`}
-        onClick={scrollToTop}
-      >
-        ↑
-      </button>
     </div>
   );
 };
