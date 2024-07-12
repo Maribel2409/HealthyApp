@@ -136,7 +136,8 @@ const Home = () => {
                     <i className={`fa-solid ${ingredient.icon}`}></i>
                   )
                 ) : (
-                  <i className="fa-solid fa-check"></i>
+                  <i className="fa-solid fa-check"
+                  style={{ color: "#00ff6a" }}></i>
                 )}{" "}
                 {ingredient.text}
               </button>

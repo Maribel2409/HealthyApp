@@ -91,11 +91,10 @@ const CalendarPage = () => {
   };
 
   return (
-    <div>
+    <div className="container mt-3">
       <h2>Añade una actividad</h2>
       <div className="mb-3">
         <label htmlFor="title" className="form-label">
-          Título
         </label>
         <input
           type="text"
@@ -103,13 +102,14 @@ const CalendarPage = () => {
           id="title"
           placeholder="Nueva actividad"
           value={newEvent.title}
+          style={{ borderColor: "#83A580" }}
           onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
         />
       </div>
       <DatePicker
         locale="es"
         placeholderText="Inicio"
-        style={{ marginRight: "10px" }}
+        style={{ marginRight: "10px", borderColor: "#83A580" }}
         selected={newEvent.start}
         onChange={(start) => setNewEvent({ ...newEvent, start })}
         showTimeSelect
@@ -123,6 +123,7 @@ const CalendarPage = () => {
       <DatePicker
         locale="es"
         placeholderText="Fin"
+        style={{ marginRight: "10px", borderColor: "#83A580" }}
         selected={newEvent.end}
         onChange={(end) => setNewEvent({ ...newEvent, end })}
         showTimeSelect
@@ -132,11 +133,11 @@ const CalendarPage = () => {
         dateFormat="MMMM d, yyyy h:mm aa"
         portalId="root-portal"
       />
-      <button className="btn btn-primary mt-3" onClick={handleAddEvent}>
+      <button className="btn btn-custom mt-3" onClick={handleAddEvent}>
         Añadir actividad
       </button>
-      <button className="btn btn-primary mt-3" onClick={handleCreateDailyPlan}>
-        Crea un plan semanal
+      <button className="btn btn-custom mt-3" onClick={handleCreateDailyPlan}>
+        Crea un plan diario
       </button>
       <Calendar
         localizer={localizer}
@@ -145,7 +146,7 @@ const CalendarPage = () => {
         )}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500, margin: "50px" }}
+        style={{ height: 500, margin: "50px", backgroundColor: "#83A580" }}
         culture="es"
         views={[ "week", "day"]} // Only show week and day views
         messages={{
