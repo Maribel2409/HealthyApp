@@ -171,7 +171,7 @@ const Home = () => {
               </div>
             </form>
           )}
-          {recipesApi && (
+          {user && recipesApi && (
             <p className="h2 mt-5">Tus recetas ya están listas revisa tu email</p>
           )}
           {loading ? (
