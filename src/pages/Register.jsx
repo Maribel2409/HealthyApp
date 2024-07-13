@@ -5,6 +5,8 @@ import FormWizard from "react-form-wizard-component";
 import "react-form-wizard-component/dist/style.css";
 import { useNavigate } from "react-router-dom";
 import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Button } from "react-bootstrap";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const Register = () => {
 
   const [isLastStep, setIsLastStep] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -37,7 +40,7 @@ const Register = () => {
     setLoading(true);
     createUser(user)
       .then(() => {
-        navigate("/login");
+        setShowModal(true);
       })
       .catch((err) => {
         console.log("ERRROR", err);
@@ -242,6 +245,19 @@ const Register = () => {
       `}</style>
         </>
       )}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Registro Exitoso</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>¡Te has registrado correctamente!</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => navigate("/login")}>
+            Ir a Iniciar Sesión
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

@@ -46,8 +46,9 @@ const CalendarPage = () => {
       typeDiet: user.typeDiet,
       alergic: user.alergic,
     };
+    const userId = user._id;
 
-    createDayPlan({ startDate, userPreferences })
+    createDayPlan({ startDate, userPreferences, userId})
       .then((response) => {
         console.log(response);
         const { dailyMealPlan } = response;
