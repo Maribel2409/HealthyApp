@@ -95,7 +95,7 @@ const Home = () => {
               Sus recetas se están preparando...a fuego lento
             </h2>
             <p>En breves momentos las recibirá en su email</p>
-            <PacmanLoading />
+              
           </div>
         </>
       ) : (
@@ -120,7 +120,9 @@ const Home = () => {
               }}
             />
           </div>
-
+        <div>
+          
+        </div>
           {user && (
             <form
               onSubmit={onSubmit}
@@ -168,6 +170,9 @@ const Home = () => {
                 </div>
               </div>
             </form>
+          )}
+          {recipesApi && (
+            <p className="h2 mt-5">Tus recetas ya están listas revisa tu email</p>
           )}
           {loading ? (
             <>
