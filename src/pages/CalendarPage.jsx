@@ -20,7 +20,7 @@ registerLocale("es", es);
 
 const localizer = dayjsLocalizer(dayjs);
 
-const events = [
+const initialEvents = [
   {
     title: "Hora de entrenar",
     start: dayjs("2024-06-28T12:00:00").toDate(),
@@ -36,7 +36,30 @@ const CalendarPage = () => {
     start: "",
     end: "",
   });
-  const [allEvents, setAllEvents] = useState(events);
+  const [allEvents, setAllEvents] = useState(initialEvents);
+
+  useEffect(() => {
+    try {
+      const savedEvents = localStorage.getItem("events");
+      if (savedEvents) {
+        setAllEvents(JSON.parse(savedEvents));
+      } else {
+        setAllEvents(initialEvents);
+      }
+    } catch (error) {
+      console.error("Error loading events from localStorage:", error);
+      setAllEvents(initialEvents);
+    }
+  }, []);
+
+  // Guardar eventos en localStorage cada vez que se actualizan
+  useEffect(() => {
+    try {
+      localStorage.setItem("events", JSON.stringify(allEvents));
+    } catch (error) {
+      console.error("Error saving events to localStorage:", error);
+    }
+  }, [allEvents]);
 
   const fetchDailyMealPlan = () => {
     const startDate = new Date().toISOString();
@@ -48,7 +71,7 @@ const CalendarPage = () => {
     };
     const userId = user._id;
 
-    createDayPlan({ startDate, userPreferences, userId})
+    createDayPlan({ startDate, userPreferences, userId })
       .then((response) => {
         console.log(response);
         const { dailyMealPlan } = response;
@@ -58,17 +81,17 @@ const CalendarPage = () => {
           return;
         }
         const eventsFromPlan = dailyMealPlan.meals.map((meal) => ({
-              recipeId: meal.meal.recipe._id,
-              title: meal.meal.name,
-              start: dayjs(dailyMealPlan.date)
-                .hour(dayjs(meal.time).hour())
-                .minute(dayjs(meal.time).minute())
-                .toDate(),
-              end: dayjs(dailyMealPlan.date)
-                .hour(dayjs(meal.time).hour())
-                .minute(dayjs(meal.time).minute() + 30)
-                .toDate(), // Supongamos que cada comida dura 30 minutos
-            }));
+          recipeId: meal.meal.recipe._id,
+          title: meal.meal.name,
+          start: dayjs(dailyMealPlan.date)
+            .hour(dayjs(meal.time).hour())
+            .minute(dayjs(meal.time).minute())
+            .toDate(),
+          end: dayjs(dailyMealPlan.date)
+            .hour(dayjs(meal.time).hour())
+            .minute(dayjs(meal.time).minute() + 30)
+            .toDate(), // Supongamos que cada comida dura 30 minutos
+        }));
 
         setAllEvents((prevEvents) => [...prevEvents, ...eventsFromPlan]);
       })
@@ -95,8 +118,7 @@ const CalendarPage = () => {
     <div className="container mt-3">
       <h2>Añade una actividad</h2>
       <div className="mb-3">
-        <label htmlFor="title" className="form-label">
-        </label>
+        <label htmlFor="title" className="form-label"></label>
         <input
           type="text"
           className="form-control"
@@ -134,12 +156,14 @@ const CalendarPage = () => {
         dateFormat="MMMM d, yyyy h:mm aa"
         portalId="root-portal"
       />
-      <button className="btn btn-custom mt-3" onClick={handleAddEvent}>
-        Añadir actividad
-      </button>
-      <button className="btn btn-custom mt-3" onClick={handleCreateDailyPlan}>
-        Crea un plan diario
-      </button>
+      <div className="container">
+        <button className="btn btn-custom mt-3 me-3" onClick={handleAddEvent}>
+          Añadir actividad
+        </button>
+        <button className="btn btn-custom mt-3" onClick={handleCreateDailyPlan}>
+          Crea un plan diario
+        </button>
+      </div>
       <Calendar
         localizer={localizer}
         events={allEvents.filter(
@@ -149,13 +173,13 @@ const CalendarPage = () => {
         endAccessor="end"
         style={{ height: 500, margin: "50px", backgroundColor: "#83A580" }}
         culture="es"
-        views={[ "week", "day"]} // Only show week and day views
+        views={["week", "day"]} // Only show week and day views
         messages={{
           month: "Mes",
           week: "Semana",
           day: "Día",
         }}
-        defaultView='day'
+        defaultView="day"
         onSelectEvent={handleSelectEvent} // Agrega el manejador de eventos
       />
     </div>
