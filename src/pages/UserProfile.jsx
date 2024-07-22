@@ -5,7 +5,7 @@ import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
 import { editUser } from "../services/ProtectUserService";
 
 const UserProfile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: user?.name || "",
@@ -41,13 +41,13 @@ const UserProfile = () => {
       .then(() => {
         //setLoading(false);
         setEditMode(false);
-        setUserData(userData);
+        updateUser(userData);
         // Actualización exitosa, podrías mostrar un mensaje de éxito o redirigir a otra página
         navigate("/user-profile");
       })
       .catch((error) => {
         console.error("Error updating user:", error);
-        setLoading(false);
+        //setLoading(false);
       });
   };
 

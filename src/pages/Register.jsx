@@ -87,6 +87,16 @@ const Register = () => {
     };
   }, [isLastStep]);
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError("");
+      }, 5000); // 5 segundos
+
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
   return (
     <>
       {loading ? (
