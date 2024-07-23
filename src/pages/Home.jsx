@@ -3,12 +3,14 @@ import { createChat } from "../services/ChatService";
 import { AuthContext } from "../contexts/AuthContext";
 import { getRecipes } from "../services/RecipesService";
 import "../index.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
 import { BsSearch } from "react-icons/bs";
 import { INGREDIENTS_VALUES } from "../utils/ingredientsButtons";
+import { Button, Modal } from "react-bootstrap";
 
 const Home = () => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
@@ -17,6 +19,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showScroll, setShowScroll] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleSearchInput = (event) => {
     const searchQuery = event.target.value;
@@ -77,6 +80,7 @@ const Home = () => {
 
     createChat(ingredients)
       .then((recipesApiRes) => {
+        setShowModal(true)
         setRecipesApi(recipesApiRes.createdRecipes);
       })
       .catch((err) => {
@@ -95,7 +99,6 @@ const Home = () => {
               Sus recetas se están preparando...a fuego lento
             </h2>
             <p>En breves momentos las recibirá en su email</p>
-              
           </div>
         </>
       ) : (
@@ -120,9 +123,7 @@ const Home = () => {
               }}
             />
           </div>
-        <div>
-          
-        </div>
+          <div></div>
           {user && (
             <form
               onSubmit={onSubmit}
@@ -172,7 +173,19 @@ const Home = () => {
             </form>
           )}
           {user && recipesApi && (
-            <p className="h2 mt-5">Tus recetas ya están listas revisa tu email</p>
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Tus recetas están listas</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p>¡Resvisa tu email!</p>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={() => navigate("/favorite-recipes")}>
+                  Ve a tus recetas
+                </Button>
+              </Modal.Footer>
+            </Modal>
           )}
           {loading ? (
             <>
