@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { getRecipe, toggleFavorite } from "../services/RecipesService";
-import { useNavigate, useParams } from "react-router-dom";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
@@ -8,11 +7,11 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import "../index.css";
 import PacmanLoading from "../components/PacmanLoading/PacmanLoading";
 import { AuthContext } from "../contexts/AuthContext";
+import { useParams } from "react-router-dom";
 
 function RecipeDetails() {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  const navigate = useNavigate();
   const [recipe, setRecipe] = useState({});
   const [loading, setLoading] = useState(true);
   const [showScroll, setShowScroll] = useState(false);
@@ -59,65 +58,64 @@ function RecipeDetails() {
   }
 
   return (
-    <div className="container mt-5">
-      <div style={{ textAlign: "center" }}>
+    <div className="container mt-5 mb-5">
+      <div className="container" style={{ textAlign: "center" }}>
         <h2 className="h2">{recipe.name}</h2>
       </div>
       <img
         src={recipe.urlImage}
-        // src={recipe.imageUrl}
         alt={recipe.name}
         style={{
-          marginTop: "20px",
-          maxWidth: "300px",
+          maxWidth: "350px",
           maxHeight: "auto",
           boxShadow: "0 0 10px #83A580",
           borderRadius: "5px",
           display: "block",
-          margin: "0 auto",
+          margin: "30px auto",
         }}
       />
 
-      {user && (
-        <button onClick={handleToggleFavorite} className="favorite-button">
-          <FontAwesomeIcon
-            icon={isFavorite ? solidHeart : regularHeart}
-            style={{ color: isFavorite ? "#83A580" : "black" }}
-          />
+      <div className="container">
+        {user && (
+          <button onClick={handleToggleFavorite} className="favorite-button">
+            <FontAwesomeIcon
+              icon={isFavorite ? solidHeart : regularHeart}
+              style={{ color: isFavorite ? "#83A580" : "black" }}
+            />
+          </button>
+        )}
+        <p className="mt-4 mb-3">{recipe.phrase}</p>
+
+        <h3 className="mb-3">
+          <u>Tiempo de preparación</u>: {recipe.preparationTime} minutos
+        </h3>
+
+        <h3>
+          <u>Ingredientes</u> ({recipe.people} personas)
+        </h3>
+        <ul className="custom-list">
+          {recipe.ingredients.map((ingredient, index) => (
+            <li key={index}>{ingredient}</li>
+          ))}
+        </ul>
+
+        <h3>
+          <u>Elaboración</u>
+        </h3>
+        <ul className="custom-list">
+          {recipe.steps.map((step, index) => (
+            <li key={index}>
+              <strong>Paso {index + 1}:</strong> {step}
+            </li>
+          ))}
+        </ul>
+        <button
+          className={`scroll-to-top ${showScroll ? "show" : ""}`}
+          onClick={scrollToTop}
+        >
+          ↑
         </button>
-      )}
-
-      <p className="mt-4 mb-3">{recipe.phrase}</p>
-
-      <h3 className="mb-3">
-        <u>Tiempo de preparación</u>: {recipe.preparationTime} minutos
-      </h3>
-
-      <h3>
-        <u>Ingredientes</u> ({recipe.people} personas)
-      </h3>
-      <ul className="custom-list">
-        {recipe.ingredients.map((ingredient, index) => (
-          <li key={index}>{ingredient}</li>
-        ))}
-      </ul>
-
-      <h3>
-        <u>Elaboración</u>
-      </h3>
-      <ul className="custom-list">
-        {recipe.steps.map((step, index) => (
-          <li key={index}>
-            <strong>Paso {index + 1}:</strong> {step}
-          </li>
-        ))}
-      </ul>
-      <button
-        className={`scroll-to-top ${showScroll ? "show" : ""}`}
-        onClick={scrollToTop}
-      >
-        ↑
-      </button>
+      </div>
     </div>
   );
 }

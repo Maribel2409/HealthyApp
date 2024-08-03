@@ -1,0 +1,16 @@
+.collapse {
+  transition: height 0.3s ease, visibility 0.8s ease, opacity 0.8s ease;
+}
+
+.collapsing {
+  transition: all .8s ease;
+  height: 0;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.collapse.show {
+  height: auto;
+  visibility: visible;
+  opacity: 1;
+}

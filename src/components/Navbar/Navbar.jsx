@@ -1,10 +1,32 @@
 import { Link } from "react-router-dom";
-import { logout } from "../stores/AccessTokenStore";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { logout } from "../../stores/AccessTokenStore";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import "./navbar.css"
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+
   return (
     <nav
       className="navbar navbar-expand-lg bg-dark border-bottom border-body"
@@ -26,13 +48,14 @@ const Navbar = () => {
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
           aria-controls="navbarNav"
-          aria-expanded="false"
+          aria-expanded={isMenuOpen ? "true" : "false"}
           aria-label="Toggle navigation"
           style={{ borderColor: "#83A580" }}
+          onClick={toggleMenu}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div className={`collapse navbar-collapse ${isMenuOpen ? "show" : ""}`} id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
               {!user && (
