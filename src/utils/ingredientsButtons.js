@@ -6,7 +6,7 @@ import { GiSteak } from "react-icons/gi";
 import { TbEggs } from "react-icons/tb";
 import { GiCannedFish } from "react-icons/gi";
 import { GiNoodles } from "react-icons/gi";
-import { GiSlicedBread } from "react-icons/gi";
+//import { GiSlicedBread } from "react-icons/gi";
 import { GiGrain } from "react-icons/gi";
 import { GiAlmond } from "react-icons/gi";
 import { GiOlive } from "react-icons/gi";
@@ -59,11 +59,11 @@ export const INGREDIENTS_VALUES = [
     value: "pasta",
     iconComponent: GiNoodles,
   },
-  {
-    text: "Pan",
-    value: "pan",
-    iconComponent: GiSlicedBread,
-  },
+  // {
+  //   text: "Pan",
+  //   value: "pan",
+  //   iconComponent: GiSlicedBread,
+  // },
   {
     text: "Cereales",
     value: "cereales",

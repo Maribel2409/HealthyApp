@@ -30,6 +30,7 @@ const Home = () => {
     getRecipes()
       .then((recipesDB) => {
         setRecipes(recipesDB);
+        setIngredients([]);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
@@ -80,7 +81,7 @@ const Home = () => {
 
     createChat(ingredients)
       .then((recipesApiRes) => {
-        setShowModal(true)
+        setShowModal(true);
         setRecipesApi(recipesApiRes.createdRecipes);
       })
       .catch((err) => {
@@ -103,10 +104,10 @@ const Home = () => {
         </>
       ) : (
         <>
-          <h2>Bienvenido</h2>
+          <h2 className="text-center">Bienvenido</h2>
           <div style={{ position: "relative" }}>
             <input
-              className="form-control me-2 mb-3"
+              className="form-control me-2 mb-4 mt-3"
               type="search"
               placeholder="Busca tu receta"
               aria-label="Search"
@@ -123,55 +124,60 @@ const Home = () => {
               }}
             />
           </div>
-          <div></div>
-          {user && (
-            <form
-              onSubmit={onSubmit}
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "10px",
-                justifyContent: "center",
-              }}
-            >
-              {INGREDIENTS_VALUES.map((ingredient) => {
-                const IconComponent = ingredient.iconComponent;
-                return (
-                  <button
-                    key={ingredient.value}
-                    type="button"
-                    className="btn btn-custom-ingredients"
-                    value={ingredient.value}
-                    onClick={handleIngredient}
-                  >
-                    {!ingredients.includes(ingredient.value) ? (
-                      IconComponent ? (
-                        <IconComponent />
+          <div className="container">
+          <h2 className="h2 mb-4">Puedes crear tu receta customizada</h2>
+          <p className="text-center">Elige los ingresdientes que quieres probar y prepararemos recetas para tí!</p>
+            {user && (
+              <form
+                onSubmit={onSubmit}
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                  justifyContent: "center",
+                  boxShadow: "0 0 10px #83a580",
+                  padding: "15px",
+                }}
+              >
+                {INGREDIENTS_VALUES.map((ingredient) => {
+                  const IconComponent = ingredient.iconComponent;
+                  return (
+                    <button
+                      key={ingredient.value}
+                      type="button"
+                      className="btn btn-custom-ingredients"
+                      value={ingredient.value}
+                      onClick={handleIngredient}
+                    >
+                      {!ingredients.includes(ingredient.value) ? (
+                        IconComponent ? (
+                          <IconComponent />
+                        ) : (
+                          <i className={`fa-solid ${ingredient.icon}`}></i>
+                        )
                       ) : (
-                        <i className={`fa-solid ${ingredient.icon}`}></i>
-                      )
-                    ) : (
-                      <i
-                        className="fa-solid fa-check"
-                        style={{ color: "#00ff6a" }}
-                      ></i>
-                    )}{" "}
-                    {ingredient.text}
-                  </button>
-                );
-              })}
-              <div className="row w-100 btn-lg-custom">
-                <div className="col d-flex justify-content-center mt-3">
-                  <button
-                    type="submit"
-                    className="btn btn-custom btn-padding-custom"
-                  >
-                    Enviar
-                  </button>
+                        <i
+                          className="fa-solid fa-check"
+                          style={{ color: "#00ff6a" }}
+                        ></i>
+                      )}{" "}
+                      {ingredient.text}
+                    </button>
+                  );
+                })}
+                <div className="row w-100 btn-lg-custom">
+                  <div className="col d-flex justify-content-center mt-3">
+                    <button
+                      type="submit"
+                      className="btn btn-custom btn-padding-custom"
+                    >
+                      Enviar
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
-          )}
+              </form>
+            )}
+          </div>
           {user && recipesApi && (
             <Modal show={showModal} onHide={() => setShowModal(false)}>
               <Modal.Header closeButton>
@@ -181,7 +187,10 @@ const Home = () => {
                 <p>¡Resvisa tu email!</p>
               </Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={() => navigate("/favorite-recipes")}>
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/favorite-recipes")}
+                >
                   Ve a tus recetas
                 </Button>
               </Modal.Footer>
