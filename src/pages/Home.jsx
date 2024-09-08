@@ -30,7 +30,6 @@ const Home = () => {
     getRecipes()
       .then((recipesDB) => {
         setRecipes(recipesDB);
-        setIngredients([]);
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
@@ -78,14 +77,20 @@ const Home = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     setLoadingApi(true);
-
+    setTimeout(() => {
+      console.log("dentro set");
+      setLoadingApi(false);
+      setIngredients([]);
+    }, 5000);
     createChat(ingredients)
       .then((recipesApiRes) => {
         setShowModal(true);
         setRecipesApi(recipesApiRes.createdRecipes);
+        setIngredients([]);
       })
       .catch((err) => {
         setLoadingApi(false);
+        setIngredients([]);
         console.error(err);
       })
       .finally(() => setLoadingApi(false));
@@ -125,57 +130,63 @@ const Home = () => {
             />
           </div>
           <div className="container">
-          <h2 className="h2 mb-4">Puedes crear tu receta customizada</h2>
-          <p className="text-center">Elige los ingresdientes que quieres probar y prepararemos recetas para tí!</p>
             {user && (
-              <form
-                onSubmit={onSubmit}
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "10px",
-                  justifyContent: "center",
-                  boxShadow: "0 0 10px #83a580",
-                  padding: "15px",
-                }}
-              >
-                {INGREDIENTS_VALUES.map((ingredient) => {
-                  const IconComponent = ingredient.iconComponent;
-                  return (
-                    <button
-                      key={ingredient.value}
-                      type="button"
-                      className="btn btn-custom-ingredients"
-                      value={ingredient.value}
-                      onClick={handleIngredient}
-                    >
-                      {!ingredients.includes(ingredient.value) ? (
-                        IconComponent ? (
-                          <IconComponent />
+              <>
+                <h2 className="h2 mb-4">Puedes crear tu receta customizada</h2>
+                <p className="text-center">
+                  Elige los ingresdientes que quieres probar y prepararemos
+                  recetas para tí!
+                </p>
+
+                <form
+                  onSubmit={onSubmit}
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    justifyContent: "center",
+                    boxShadow: "0 0 10px #83a580",
+                    padding: "15px",
+                  }}
+                >
+                  {INGREDIENTS_VALUES.map((ingredient) => {
+                    const IconComponent = ingredient.iconComponent;
+                    return (
+                      <button
+                        key={ingredient.value}
+                        type="button"
+                        className="btn btn-custom-ingredients"
+                        value={ingredient.value}
+                        onClick={handleIngredient}
+                      >
+                        {!ingredients.includes(ingredient.value) ? (
+                          IconComponent ? (
+                            <IconComponent />
+                          ) : (
+                            <i className={`fa-solid ${ingredient.icon}`}></i>
+                          )
                         ) : (
-                          <i className={`fa-solid ${ingredient.icon}`}></i>
-                        )
-                      ) : (
-                        <i
-                          className="fa-solid fa-check"
-                          style={{ color: "#00ff6a" }}
-                        ></i>
-                      )}{" "}
-                      {ingredient.text}
-                    </button>
-                  );
-                })}
-                <div className="row w-100 btn-lg-custom">
-                  <div className="col d-flex justify-content-center mt-3">
-                    <button
-                      type="submit"
-                      className="btn btn-custom btn-padding-custom"
-                    >
-                      Enviar
-                    </button>
+                          <i
+                            className="fa-solid fa-check"
+                            style={{ color: "#00ff6a" }}
+                          ></i>
+                        )}{" "}
+                        {ingredient.text}
+                      </button>
+                    );
+                  })}
+                  <div className="row w-100 btn-lg-custom">
+                    <div className="col d-flex justify-content-center mt-3">
+                      <button
+                        type="submit"
+                        className="btn btn-custom btn-padding-custom"
+                      >
+                        Enviar
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
+                </form>
+              </>
             )}
           </div>
           {user && recipesApi && (
