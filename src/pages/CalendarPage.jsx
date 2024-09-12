@@ -35,31 +35,15 @@ const CalendarPage = () => {
   });
   const [allEvents, setAllEvents] = useState([]);
 
-  useEffect(() => {
-    try {
-      const savedEvents = localStorage.getItem("events");
-      console.log("savedEvents", savedEvents);
-      if (savedEvents) {
-        setAllEvents(JSON.parse(savedEvents));
-      } else {
-        setAllEvents([]);
-      }
-    } catch (error) {
-      console.error("Error loading events from localStorage:", error);
-    }
-  }, []);
-
-  // Guardar eventos en localStorage cada vez que se actualizan
-  useEffect(() => {
-    if (allEvents && allEvents.length > 0) {
-      try {
-        console.log("Guardando eventos en localStorage:", allEvents);
-        localStorage.setItem("events", JSON.stringify(allEvents));
-      } catch (error) {
-        console.error("Error saving events to localStorage:", error);
-      }
-    }
-  }, [allEvents]);
+  
+   //Guardar eventos en localStorage cada vez que se actualizan
+   useEffect(() => {
+     try {
+       localStorage.setItem("events", JSON.stringify(allEvents));
+     } catch (error) {
+       console.error("Error saving events to localStorage:", error);
+     }
+   }, [allEvents]);
 
   const fetchDailyMealPlan = () => {
     const startDate = new Date().toISOString();
@@ -106,7 +90,9 @@ const CalendarPage = () => {
 
   //funcion para añadir nuevos eventos
   const handleAddEvent = () => {
-    setAllEvents([...allEvents, newEvent]);
+    const updatedEvents = [...allEvents, newEvent];
+    setAllEvents(updatedEvents);
+
   };
 
   // Función para manejar el clic en un evento
@@ -133,6 +119,7 @@ const CalendarPage = () => {
         locale="es"
         placeholderText="Inicio"
         style={{ marginRight: "10px", borderColor: "#83A580" }}
+        className="mb-3"
         selected={newEvent.start}
         onChange={(start) => setNewEvent({ ...newEvent, start })}
         showTimeSelect
