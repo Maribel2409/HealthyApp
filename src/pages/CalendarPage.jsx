@@ -1,7 +1,4 @@
 //import format from "date-fns/format";
-import getDay from "date-fns/getDay";
-import parse from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
 import { useContext, useEffect, useState } from "react";
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -36,19 +33,19 @@ const CalendarPage = () => {
     start: "",
     end: "",
   });
-  const [allEvents, setAllEvents] = useState(initialEvents);
+  const [allEvents, setAllEvents] = useState([]);
 
   useEffect(() => {
     try {
       const savedEvents = localStorage.getItem("events");
+      console.log("savedEvents",savedEvents)
       if (savedEvents) {
         setAllEvents(JSON.parse(savedEvents));
       } else {
-        setAllEvents(initialEvents);
+        setAllEvents([]);
       }
     } catch (error) {
       console.error("Error loading events from localStorage:", error);
-      setAllEvents(initialEvents);
     }
   }, []);
 
@@ -92,7 +89,7 @@ const CalendarPage = () => {
             .minute(dayjs(meal.time).minute() + 30)
             .toDate(), // Supongamos que cada comida dura 30 minutos
         }));
-
+        console.log("***************EVENTOS",eventsFromPlan)
         setAllEvents((prevEvents) => [...prevEvents, ...eventsFromPlan]);
       })
       .catch((error) => {
