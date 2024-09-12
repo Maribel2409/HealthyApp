@@ -38,7 +38,7 @@ const CalendarPage = () => {
   useEffect(() => {
     try {
       const savedEvents = localStorage.getItem("events");
-      console.log("savedEvents",savedEvents)
+      console.log("savedEvents", savedEvents);
       if (savedEvents) {
         setAllEvents(JSON.parse(savedEvents));
       } else {
@@ -51,10 +51,13 @@ const CalendarPage = () => {
 
   // Guardar eventos en localStorage cada vez que se actualizan
   useEffect(() => {
-    try {
-      localStorage.setItem("events", JSON.stringify(allEvents));
-    } catch (error) {
-      console.error("Error saving events to localStorage:", error);
+    if (allEvents && allEvents.length > 0) {
+      try {
+        console.log("Guardando eventos en localStorage:", allEvents);
+        localStorage.setItem("events", JSON.stringify(allEvents));
+      } catch (error) {
+        console.error("Error saving events to localStorage:", error);
+      }
     }
   }, [allEvents]);
 
@@ -89,7 +92,7 @@ const CalendarPage = () => {
             .minute(dayjs(meal.time).minute() + 30)
             .toDate(), // Supongamos que cada comida dura 30 minutos
         }));
-        console.log("***************EVENTOS",eventsFromPlan)
+        console.log("***************EVENTOS", eventsFromPlan);
         setAllEvents((prevEvents) => [...prevEvents, ...eventsFromPlan]);
       })
       .catch((error) => {
