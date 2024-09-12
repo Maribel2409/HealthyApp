@@ -263,7 +263,11 @@ const Register = () => {
           <p>¡Te has registrado correctamente!</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => navigate("/login")}>
+          <Button
+            className="btn btn-custom ms-2"
+            variant="primary"
+            onClick={() => navigate("/login")}
+          >
             Ir a Iniciar Sesión
           </Button>
         </Modal.Footer>
